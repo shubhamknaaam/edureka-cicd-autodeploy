@@ -1,9 +1,4 @@
 pipeline {
-    environment {
-	    imagename = "jaiswalsbm/proj2"
-	    registryCredential = 'dockerhub'
-	    dockerImage = ''
-    }
     agent any
     stages {
         stage('Build') {
@@ -15,12 +10,22 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-		script {
-                    sh 'sudo docker build -t jaiswalsbm/proj2 .'
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    sh "sudo docker login --username ${env.user} --password-stdin ${env.pass}"
-                    sh 'sudo docker push jaiswalsbm/proj2'
-		    } }
+                script {
+                    app = docker.build("jaiswalsbm/proj2")
+                    app.inside {
+                        sh 'echo Hello, World!'
+                    }
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                        app.push("${env.BUILD_NUMBER}")
+                        app.push("latest")
+                    }
+                }
             }
         }
         stage('CanaryDeploy') {
