@@ -10,7 +10,9 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-		sh 'sudo docker build -t jaiswalsbm/proj2 .'
+		script {
+                      dockerImage = docker.build jaiswalsbm/proj2
+                   }
             }
         }
         stage('Push Docker Image') {
@@ -20,8 +22,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry( '', registryCredential ) {
-				dockerImage.push("$BUILD_NUMBER")
-				dockerImage.push('latest')
+			dockerImage.push("$BUILD_NUMBER")
+			dockerImage.push('latest')
 			}
                     }
                 }
