@@ -1,9 +1,5 @@
 pipeline {
     agent any
-    environment {
-        //be sure to replace "bhavukm" with your own Docker Hub username
-        DOCKERHUB_CREDENTIALS=credentials('dockerhub')
-    }
     stages {
         stage('Build') {
             steps {
@@ -18,6 +14,9 @@ pipeline {
             }
         }
         stage('Push Docker Image') {
+	    environment {
+            DOCKERHUB_CREDENTIALS=credentials('dockerhub')
+            }
             steps {
                 script {
                     sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
