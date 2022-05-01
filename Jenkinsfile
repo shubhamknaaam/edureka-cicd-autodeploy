@@ -31,8 +31,9 @@ pipeline {
                 CANARY_REPLICAS = 1
             }
             steps {
-                sh 'sleep 10s'
-                )
+                script {
+                        sh 'echo Hello, World!'
+                }
             }
         }
         stage('DeployToProduction') {
@@ -40,7 +41,8 @@ pipeline {
                 CANARY_REPLICAS = 0
             }
             steps {
-            sh 'sleep 18s'
+                script {
+                        sh 'echo Hello, World!'
             }
         }
     }
