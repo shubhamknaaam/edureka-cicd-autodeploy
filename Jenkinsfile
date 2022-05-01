@@ -21,7 +21,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    sh 'sudo docker push jaiswalsbm/proj2:latest'
+                    sh 'echo Hello, World!'
                     
                 }
             }
