@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         //be sure to replace "bhavukm" with your own Docker Hub username
-        DOCKER_IMAGE_NAME = "jaiswalsbm/proj2"
+        DOCKERHUB_CREDENTIALS=credentials('dockerhub')
     }
     stages {
         stage('Build') {
@@ -20,8 +20,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    sh "sudo docker login --username ${env.user} --password-stdin ${env.pass}"
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                     sh 'sudo docker push jaiswalsbm/proj2'
                     }
                 }
