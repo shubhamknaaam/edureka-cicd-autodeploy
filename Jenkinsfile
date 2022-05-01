@@ -14,15 +14,15 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-				sh 'docker build -t jaiswalsbm/proj2:latest .'
+		sh 'sudo docker build -t jaiswalsbm/proj2 .'
             }
         }
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
-                        app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'user')]) {
+                    sh "sudo docker login --username ${env.user} --password-stdin ${env.pass}"
+                    sh 'sudo docker push jaiswalsbm/proj2'
                     }
                 }
             }
