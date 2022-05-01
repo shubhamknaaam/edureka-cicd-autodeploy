@@ -1,4 +1,9 @@
 pipeline {
+    environment {
+	    imagename = "jaiswalsbm/proj2"
+	    registryCredential = 'dockerhub'
+	    dockerImage = ''
+    }
     agent any
     stages {
         stage('Build') {
@@ -11,14 +16,11 @@ pipeline {
         stage('Build Docker Image') {
             steps {
 		script {
-                      dockerImage = docker.build jaiswalsbm/proj2
+                      dockerImage = docker.build imagename
                    }
             }
         }
         stage('Push Docker Image') {
-	    environment {
-            registryCredential = 'dockerhub'
-            }
             steps {
                 script {
                     docker.withRegistry( '', registryCredential ) {
