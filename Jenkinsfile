@@ -32,7 +32,7 @@ pipeline {
             }
             steps {
                 script {
-                        sh 'echo Hello, World!'
+                        sh 'sleep 11s'
                 }
             }
         }
@@ -42,7 +42,7 @@ pipeline {
             }
             steps {
                 script {
-                        sh 'echo Hello, World!'
+                        sh 'sleep 8s'
             }
         }
     }
