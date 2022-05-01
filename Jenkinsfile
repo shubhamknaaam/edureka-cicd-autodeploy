@@ -20,7 +20,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'user')]) {
                     sh "sudo docker login --username ${env.user} --password-stdin ${env.pass}"
                     sh 'sudo docker push jaiswalsbm/proj2'
-                   }
+		    } }
             }
         }
         stage('CanaryDeploy') {
