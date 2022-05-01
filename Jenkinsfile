@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     sh 'sudo docker push jaiswalsbm/proj2'
-                    }
+                    
                 }
             }
         }
