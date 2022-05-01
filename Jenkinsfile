@@ -16,20 +16,13 @@ pipeline {
         stage('Build Docker Image') {
             steps {
 		script {
-                      dockerImage = docker.build imagename
+                    sh 'sudo docker build -t jaiswalsbm/proj2 .'
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'user')]) {
+                    sh "sudo docker login --username ${env.user} --password-stdin ${env.pass}"
+                    sh 'sudo docker push jaiswalsbm/proj2'
                    }
             }
         }
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    docker.withRegistry( '', registryCredential ) {
-			dockerImage.push("$BUILD_NUMBER")
-			dockerImage.push('latest')
-			}
-                    }
-                }
-            }
         stage('CanaryDeploy') {
             when {
                 branch 'master'
