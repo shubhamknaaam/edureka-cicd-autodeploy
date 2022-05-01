@@ -15,12 +15,14 @@ pipeline {
         }
         stage('Push Docker Image') {
 	    environment {
-            DOCKERHUB_CREDENTIALS=credentials('dockerhub')
+            registryCredential = 'dockerhub'
             }
             steps {
                 script {
-                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                    sh 'sudo docker push jaiswalsbm/proj2'
+                    docker.withRegistry( '', registryCredential ) {
+				dockerImage.push("$BUILD_NUMBER")
+				dockerImage.push('latest')
+			}
                     }
                 }
             }
